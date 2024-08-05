@@ -10,7 +10,9 @@ useEffect(()=>{
   generateToken();
   onMessageListener()
   .then((payload) => {
-   console.log("dsdsdsdsd")
+   console.log("payload");
+   console.log(payload);
+   console.log("finalized");
   })
   .catch((err) => console.log("failed: ", err));
 
