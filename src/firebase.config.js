@@ -16,25 +16,63 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
- const messaging = getMessaging(app);
+const messaging = getMessaging(app);
 
+// export const generateToken = async () => {
+//   const permission = await Notification.requestPermission();
+//   if (permission === "granted") {
+//     const token = await getToken(messaging, {
+//       vapidKey:
+//         "BG5NnVzya5kAcbWmOZOOUE0pDsF8GnXUGfYFmGhpXp0AfMgu3LLqt_icMvYOvy1FGJXDflz4AZKs4SARsXc1bj4",
+//     });
+//     console.log("Tokennnnnnnnnn granted", token);
+//   }
+// };
 
 export const generateToken = async () => {
-  const permission = await Notification.requestPermission();
-  if (permission === "granted") {
-    const token = await getToken(messaging, {
-      vapidKey:
-        "BG5NnVzya5kAcbWmOZOOUE0pDsF8GnXUGfYFmGhpXp0AfMgu3LLqt_icMvYOvy1FGJXDflz4AZKs4SARsXc1bj4",
-    });
-    console.log("Tokennnnnnnnnn granted", token);
+  try {
+    // Register the service worker
+    if ("serviceWorker" in navigator) {
+      const registration = await navigator.serviceWorker.register(
+        "/testreact/firebase-messaging-sw.js",
+        { type: "module" }
+      );
+
+      console.log("Service Worker registered with scope:", registration.scope);
+
+      // Request notification permission
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
+
+        // Get the FCM token
+        const token = await getToken(messaging, {
+          vapidKey:
+            "BG5NnVzya5kAcbWmOZOOUE0pDsF8GnXUGfYFmGhpXp0AfMgu3LLqt_icMvYOvy1FGJXDflz4AZKs4SARsXc1bj4",
+          serviceWorkerRegistration: registration, // Use the registered service worker
+        });
+
+        if (token) {
+          console.log("FCM Token:", token);
+        } else {
+          console.error("Failed to get the FCM token.");
+        }
+      } else {
+        console.error("Notification permission denied.");
+      }
+    } else {
+      console.error("Service Workers are not supported in this browser.");
+    }
+  } catch (error) {
+    console.error("Error during token generation:", error);
   }
 };
 
 export const onMessageListener = () =>
-    new Promise((resolve) => {
-      onMessage(messaging, (payload) => {
-        resolve(payload);
-      });
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      resolve(payload);
+    });
   });
 
 // onMessage(messaging, (payload) => {
