@@ -20,7 +20,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-      <h1 style={{color:"red"}}>Hello</h1>
+      <h1 style={{color:"green"}}>Hello</h1>
     </div>
   );
 }
