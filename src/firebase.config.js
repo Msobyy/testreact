@@ -18,16 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-// export const generateToken = async () => {
-//   const permission = await Notification.requestPermission();
-//   if (permission === "granted") {
-//     const token = await getToken(messaging, {
-//       vapidKey:
-//         "BG5NnVzya5kAcbWmOZOOUE0pDsF8GnXUGfYFmGhpXp0AfMgu3LLqt_icMvYOvy1FGJXDflz4AZKs4SARsXc1bj4",
-//     });
-//     console.log("Tokennnnnnnnnn granted", token);
-//   }
-// };
 
 export const generateToken = async () => {
   try {
